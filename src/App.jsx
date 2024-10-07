@@ -1,8 +1,7 @@
-// src/App.jsx
-import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+import { lazy, Suspense } from 'react';
 
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const MoviesPage = lazy(() => import('./pages/MoviesPage/MoviesPage'));
