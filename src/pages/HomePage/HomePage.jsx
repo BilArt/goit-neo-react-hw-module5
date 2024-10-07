@@ -1,6 +1,6 @@
-import { fetchTrendingMovies } from "../services/tmdbAPI";
+import { fetchTrendingMovies } from "../../services/tmdbAPI";
 import { useState, useEffect } from "react";
-import MovieList from "../components/MovieList";
+import MovieList from "../../components/MovieList/MovieList";
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);

@@ -1,0 +1,36 @@
+.movie-list {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.movie-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    transition: transform 0.2s;
+}
+
+.movie-item:hover {
+    transform: scale(1.02);
+}
+
+.movie-title {
+    margin-left: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.movie-poster {
+    width: 100px;
+    height: 150px;
+    border-radius: 5px;
+    object-fit: cover;
+}
