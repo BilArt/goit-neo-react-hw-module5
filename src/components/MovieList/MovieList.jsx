@@ -1,25 +1,23 @@
-import PropTypes from "prop-types";
-import "./MovieList.module.css";
+import PropTypes from 'prop-types';
+import MovieCard from './MovieCard';
 
 const MovieList = ({ movies }) => {
-  return (
-    <div className="movie-list">
-      {movies.map((movie) => (
-        <div key={movie.id} className="movie-item">
-          <img
-            className="movie-poster"
-            src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-            alt={movie.title}
-          />
-          <span className="movie-title">{movie.title}</span>
-        </div>
-      ))}
-    </div>
-  );
+    return (
+        <ul>
+            {movies.map(movie => (
+                <MovieCard key={movie.id} movie={movie} />
+            ))}
+        </ul>
+    );
 };
 
 MovieList.propTypes = {
-  movies: PropTypes.array.isRequired,
+    movies: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            title: PropTypes.string.isRequired,
+        })
+    ).isRequired,
 };
 
 export default MovieList;
