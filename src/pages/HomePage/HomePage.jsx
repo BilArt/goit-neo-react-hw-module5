@@ -1,22 +1,34 @@
-import { fetchTrendingMovies } from "../../services/tmdbAPI";
 import { useState, useEffect } from "react";
+import { fetchTrendingMovies } from "../../services/tmdbAPI";
 import MovieList from "../../components/MovieList/MovieList";
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getTrendingMovies = async () => {
+    const getMovies = async () => {
       try {
-        const trendingMovies = await fetchTrendingMovies();
-        setMovies(trendingMovies);
+        const data = await fetchTrendingMovies();
+        setMovies(data);
       } catch (error) {
-        console.error("Error fetching trending movies:", error);
+        setError("Failed to fetch movies");
+      } finally {
+        setLoading(false);
       }
     };
 
-    getTrendingMovies();
+    getMovies();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
