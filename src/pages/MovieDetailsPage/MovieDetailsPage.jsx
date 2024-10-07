@@ -1,62 +1,44 @@
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchMovieDetails } from '../services/tmdbAPI';
-import PropTypes from 'prop-types';
-import styles from './MovieDetailsPage.module.css';
+import MovieCast from '../../components/MovieCast/MovieCast';
+import MovieReviews from '../../components/MovieReviews/MovieReviews';
+import { fetchMovieDetails, fetchMovieCast, fetchMovieReviews } from '../../services/tmdbAPI';
 
 const MovieDetailsPage = () => {
-    const { movieId } = useParams(); 
-    const [movie, setMovie] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const { movieId } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [cast, setCast] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
-    useEffect(() => {
-        const getMovieDetails = async () => {
-            try {
-                const data = await fetchMovieDetails(movieId);
-                setMovie(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const getMovieDetails = async () => {
+      const movieDetails = await fetchMovieDetails(movieId);
+      setMovie(movieDetails);
 
-        getMovieDetails();
-    }, [movieId]);
+      const movieCast = await fetchMovieCast(movieId);
+      setCast(movieCast);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+      const movieReviews = await fetchMovieReviews(movieId);
+      setReviews(movieReviews);
+    };
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    getMovieDetails();
+  }, [movieId]);
 
-    if (!movie) {
-        return <div>No movie found.</div>;
-    }
+  if (!movie) return null;
 
-    const { title, overview, release_date, vote_average, poster_path } = movie;
-
-    return (
-        <div className={styles.movieDetails}>
-            <h1>{title}</h1>
-            {poster_path && (
-                <img
-                    src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-                    alt={title}
-                />
-            )}
-            <p><strong>Overview:</strong> {overview}</p>
-            <p><strong>Release Date:</strong> {release_date}</p>
-            <p><strong>Rating:</strong> {vote_average}</p>
-        </div>
-    );
-};
-
-MovieDetailsPage.propTypes = {
-    movieId: PropTypes.string,
+  return (
+    <div>
+      <h1>{movie.title}</h1>
+      <p>{movie.overview}</p>
+      <Link to={`/movies/${movieId}/cast`}>Cast</Link>
+      <Link to={`/movies/${movieId}/reviews`}>Reviews</Link>
+      <MovieCast cast={cast} />
+      <MovieReviews reviews={reviews} />
+      <Link to="/movies">Go back</Link>
+    </div>
+  );
 };
 
 export default MovieDetailsPage;

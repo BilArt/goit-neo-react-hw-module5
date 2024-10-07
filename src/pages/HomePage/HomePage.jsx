@@ -1,4 +1,3 @@
-// src/pages/HomePage/HomePage.jsx
 import { useEffect, useState } from "react";
 import { fetchTrendingMovies } from "../../services/tmdbAPI.js";
 import MovieList from "../../components/MovieList/MovieList";
