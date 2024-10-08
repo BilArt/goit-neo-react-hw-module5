@@ -32,8 +32,8 @@ const MovieDetailsPage = () => {
     <div>
       <h1>{movie.title}</h1>
       <p>{movie.overview}</p>
-      <Link to={`/movies/${movieId}/cast`}>Cast</Link>
-      <Link to={`/movies/${movieId}/reviews`}>Reviews</Link>
+      <Link to={`/movies/${movieId}/cast`}>Cast</Link> 
+      <Link to={`/movies/${movieId}/reviews`}>Reviews</Link> 
       <MovieCast cast={cast} />
       <MovieReviews reviews={reviews} />
       <Link to="/movies">Go back</Link>
