@@ -1,26 +1,35 @@
-import { searchMovies } from "../../services/tmdbAPI";
-import { useState } from "react";
-import MovieList from "../../components/MovieList/MovieList";
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { searchMovies } from '../../services/tmdbAPI';
+import MovieList from '../../components/MovieList/MovieList';
 import styles from './MoviesPage.module.css';
 
 const MoviesPage = () => {
   const [movies, setMovies] = useState([]);
-  const [query, setQuery] = useState("");
   const [error, setError] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query') || '';
 
-  const handleSearch = async (event) => {
+  useEffect(() => {
+    if (!query) return;
+
+    const fetchMovies = async () => {
+      try {
+        const results = await searchMovies(query);
+        setMovies(results.results);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchMovies();
+  }, [query]);
+
+  const handleSearch = (event) => {
     event.preventDefault();
-    if (!query) {
-      setError("Please enter a search query");
-      return;
-    }
-    setError(null);
-    try {
-      const results = await searchMovies(query);
-      console.log('API response:', results);
-      setMovies(results.results);
-    } catch (error) {
-      setError(error.message);
+    const searchQuery = event.target.elements.query.value.trim();
+    if (searchQuery) {
+      setSearchParams({ query: searchQuery });
     }
   };
 
@@ -29,8 +38,8 @@ const MoviesPage = () => {
       <form onSubmit={handleSearch} className={styles.searchForm}>
         <input
           type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          name="query"
+          defaultValue={query}
           placeholder="Search for a movie..."
           className={styles.searchInput}
         />

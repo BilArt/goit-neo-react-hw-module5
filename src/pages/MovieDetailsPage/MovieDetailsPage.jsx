@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { fetchMovieDetails } from '../../services/tmdbAPI';
-import MovieCast from '../../components/MovieCast/MovieCast';
-import MovieReviews from '../../components/MovieReviews/MovieReviews';
 import styles from './MovieDetailsPage.module.css';
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
-  const [showCast, setShowCast] = useState(false);
-  const [showReviews, setShowReviews] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,16 +17,6 @@ const MovieDetailsPage = () => {
 
     getMovieDetails();
   }, [movieId]);
-
-  const toggleCast = () => {
-    setShowCast(prevState => !prevState);
-    setShowReviews(false);
-  };
-
-  const toggleReviews = () => {
-    setShowReviews(prevState => !prevState);
-    setShowCast(false);
-  };
 
   const handleGoBack = () => {
     if (location.state && location.state.from) {
@@ -54,14 +40,12 @@ const MovieDetailsPage = () => {
       <p>Genres: {genres.map(genre => genre.name).join(', ')}</p>
 
       <div className={styles.links}>
-        <button onClick={toggleCast} className={styles.link}>Cast</button>
-        <button onClick={toggleReviews} className={styles.link}>Reviews</button>
+        <button onClick={() => navigate('cast')} className={styles.link}>Cast</button>
+        <button onClick={() => navigate('reviews')} className={styles.link}>Reviews</button>
       </div>
 
-      {showCast && <MovieCast />}
-      {showReviews && <MovieReviews />}
+      <Outlet />
 
-      {/* Go back button */}
       <button onClick={handleGoBack} className={styles.goBackButton}>Go back</button>
     </div>
   );
